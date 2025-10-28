@@ -361,6 +361,39 @@ select.form-control {
   }
 }
 
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: var(--space-10);
+  max-height: 160px;
+  overflow-y: auto;
+  background-color: var(--color-background);
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+.checkbox-empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
 textarea.form-control {
   resize: vertical;
   min-height: 80px;
@@ -779,6 +812,14 @@ tbody tr:hover {
                             </select>
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Ответственный</label>
+                            <div class="checkbox-list" id="filter-responsible"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Классы</label>
+                            <div class="checkbox-list" id="filter-classes"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label">Дата от</label>
                             <input type="date" class="form-control" id="filter-date-from">
                         </div>
@@ -906,69 +947,123 @@ tbody tr:hover {
         let programs = ['Профминимум', 'Общешкольные мероприятия', 'Билет в будущее', 'Профориентация'];
         let editingEventId = null;
         let deleteEventId = null;
-        let sortAsc = false;
+        let sortAsc = true;
         let classParticipantCounter = 0;
+        const EVENTS_STORAGE_KEY = 'proforientation-events';
+        const DEFAULT_EVENTS = [
+            {
+                id: 1,
+                date: '2025-09-09',
+                name: 'Организационно-презентационная сессия "Единая модель профориентации школьников"',
+                program: 'Билет в будущее',
+                type: 'Онлайн конференция',
+                classes: [
+                    { className: '6В', studentsCount: 0, parentsCount: 1 },
+                    { className: '7А', studentsCount: 0, parentsCount: 1 },
+                    { className: '7Б', studentsCount: 0, parentsCount: 2 },
+                    { className: '9А', studentsCount: 0, parentsCount: 1 }
+                ],
+                totalStudents: 0,
+                totalParents: 5,
+                totalParticipants: 5,
+                responsible: 'Подоляко В.В.',
+                note: 'Проверка активности родителей школы.',
+                links: 'МО_4107 от 28.08.2025'
+            },
+            {
+                id: 2,
+                date: '2025-09-10',
+                name: 'III Самарская выставка профессий',
+                program: 'Билет в будущее',
+                type: 'Выставка',
+                classes: [
+                    { className: '9Г', studentsCount: 5, parentsCount: 0 }
+                ],
+                totalStudents: 5,
+                totalParents: 0,
+                totalParticipants: 5,
+                responsible: 'Груздева О.П.',
+                note: 'Актуализация профессинальных навыков, ознакомление с профессиями.',
+                links: '4664 от 03.09.2025: https://vk.com/wall-191404069_5404'
+            },
+            {
+                id: 3,
+                date: '2025-09-15',
+                name: 'Мастер класс от специалиста школы IT "Easy code"',
+                program: 'Профориентация',
+                type: 'Мастер класс',
+                classes: [
+                    { className: '6В', studentsCount: 22, parentsCount: 0 },
+                    { className: '8Б', studentsCount: 17, parentsCount: 0 },
+                    { className: '8Г', studentsCount: 14, parentsCount: 0 },
+                    { className: '9А', studentsCount: 25, parentsCount: 0 },
+                    { className: '9Б', studentsCount: 14, parentsCount: 0 },
+                    { className: '9В', studentsCount: 22, parentsCount: 0 }
+                ],
+                totalStudents: 114,
+                totalParents: 0,
+                totalParticipants: 114,
+                responsible: 'Подоляко В.В.',
+                note: 'Актуализация профессинальных навыков, ознакомление с программированием',
+                links: 'https://vk.com/wall-191404069_5561'
+            }
+        ];
 
-        // Initialize with existing events
+        const RU_COLLATOR = new Intl.Collator('ru', { numeric: true, sensitivity: 'base' });
+
+        function getDefaultEvents() {
+            return DEFAULT_EVENTS.map(event => ({
+                ...event,
+                classes: event.classes.map(cls => ({ ...cls }))
+            }));
+        }
+
+        function sortEventsChronologically() {
+            events.sort((a, b) => {
+                const dateA = a.date ? new Date(a.date) : new Date(0);
+                const dateB = b.date ? new Date(b.date) : new Date(0);
+                return dateA - dateB;
+            });
+        }
+
+        function saveEvents() {
+            sortEventsChronologically();
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(events));
+            }
+        }
+
+        function updateSortIcon() {
+            const icon = document.getElementById('sort-icon');
+            if (icon) {
+                icon.className = sortAsc ? 'fas fa-sort-up' : 'fas fa-sort-down';
+            }
+        }
+
         function initializeExistingEvents() {
-            events = [
-                {
-                    id: 1,
-                    date: '2025-09-09',
-                    name: 'Организационно-презентационная сессия "Единая модель профориентации школьников"',
-                    program: 'Билет в будущее',
-                    type: 'Онлайн конференция',
-                    classes: [
-                        { className: '6В', studentsCount: 0, parentsCount: 1 },
-                        { className: '7А', studentsCount: 0, parentsCount: 1 },
-                        { className: '7Б', studentsCount: 0, parentsCount: 2 },
-                        { className: '9А', studentsCount: 0, parentsCount: 1 }
-                    ],
-                    totalStudents: 0,
-                    totalParents: 5,
-                    totalParticipants: 5,
-                    responsible: 'Подоляко В.В.',
-                    note: 'Проверка активности родителей школы.',
-                    links: 'МО_4107 от 28.08.2025'
-                },
-                {
-                    id: 2,
-                    date: '2025-09-10',
-                    name: 'III Самарская выставка профессий',
-                    program: 'Билет в будущее',
-                    type: 'Выставка',
-                    classes: [
-                        { className: '9Г', studentsCount: 5, parentsCount: 0 }
-                    ],
-                    totalStudents: 5,
-                    totalParents: 0,
-                    totalParticipants: 5,
-                    responsible: 'Груздева О.П.',
-                    note: 'Актуализация профессинальных навыков, ознакомление с профессиями.',
-                    links: '4664 от 03.09.2025: https://vk.com/wall-191404069_5404'
-                },
-                {
-                    id: 3,
-                    date: '2025-09-15',
-                    name: 'Мастер класс от специалиста школы IT "Easy code"',
-                    program: 'Профориентация',
-                    type: 'Мастер класс',
-                    classes: [
-                        { className: '6В', studentsCount: 22, parentsCount: 0 },
-                        { className: '8Б', studentsCount: 17, parentsCount: 0 },
-                        { className: '8Г', studentsCount: 14, parentsCount: 0 },
-                        { className: '9А', studentsCount: 25, parentsCount: 0 },
-                        { className: '9Б', studentsCount: 14, parentsCount: 0 },
-                        { className: '9В', studentsCount: 22, parentsCount: 0 }
-                    ],
-                    totalStudents: 114,
-                    totalParents: 0,
-                    totalParticipants: 114,
-                    responsible: 'Подоляко В.В.',
-                    note: 'Актуализация профессинальных навыков, ознакомление с программированием',
-                    links: 'https://vk.com/wall-191404069_5561'
+            if (typeof localStorage !== 'undefined') {
+                const storedEvents = localStorage.getItem(EVENTS_STORAGE_KEY);
+                if (storedEvents) {
+                    try {
+                        const parsed = JSON.parse(storedEvents);
+                        events = Array.isArray(parsed) ? parsed : getDefaultEvents();
+                    } catch (error) {
+                        console.error('Не удалось считать мероприятия из хранилища', error);
+                        events = getDefaultEvents();
+                    }
+                } else {
+                    events = getDefaultEvents();
                 }
-            ];
+            } else {
+                events = getDefaultEvents();
+            }
+
+            events = events.map(event => ({
+                ...event,
+                classes: Array.isArray(event.classes) ? event.classes : []
+            }));
+
+            saveEvents();
         }
 
         // Initialize app
@@ -985,6 +1080,8 @@ tbody tr:hover {
             document.getElementById('search-name').addEventListener('input', renderEvents);
             document.getElementById('filter-type').addEventListener('change', renderEvents);
             document.getElementById('filter-program').addEventListener('change', renderEvents);
+            document.getElementById('filter-responsible').addEventListener('change', renderEvents);
+            document.getElementById('filter-classes').addEventListener('change', renderEvents);
             document.getElementById('filter-date-from').addEventListener('change', renderEvents);
             document.getElementById('filter-date-to').addEventListener('change', renderEvents);
 
@@ -1014,11 +1111,74 @@ tbody tr:hover {
         function updateFilters() {
             const filterType = document.getElementById('filter-type');
             const filterProgram = document.getElementById('filter-program');
-            
-            filterType.innerHTML = '<option value="">Все типы</option>' + 
-                eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
-            filterProgram.innerHTML = '<option value="">Все программы</option>' + 
-                programs.map(p => `<option value="${p}">${p}</option>`).join('');
+            const filterResponsible = document.getElementById('filter-responsible');
+            const filterClasses = document.getElementById('filter-classes');
+
+            if (filterType) {
+                const currentType = filterType.value;
+                filterType.innerHTML = '<option value="">Все типы</option>' +
+                    eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+                if (currentType && eventTypes.includes(currentType)) {
+                    filterType.value = currentType;
+                } else {
+                    filterType.value = '';
+                }
+            }
+
+            if (filterProgram) {
+                const currentProgram = filterProgram.value;
+                filterProgram.innerHTML = '<option value="">Все программы</option>' +
+                    programs.map(p => `<option value="${p}">${p}</option>`).join('');
+                if (currentProgram && programs.includes(currentProgram)) {
+                    filterProgram.value = currentProgram;
+                } else {
+                    filterProgram.value = '';
+                }
+            }
+
+            if (filterResponsible) {
+                const selectedResponsibles = getSelectedValues(filterResponsible);
+                const responsibles = Array.from(new Set(events
+                    .map(event => event.responsible)
+                    .filter(Boolean)))
+                    .sort((a, b) => RU_COLLATOR.compare(a, b));
+
+                if (responsibles.length === 0) {
+                    filterResponsible.innerHTML = '<div class="checkbox-empty">Нет доступных ответственных</div>';
+                } else {
+                    filterResponsible.innerHTML = responsibles
+                        .map(responsible => `
+                            <label class="checkbox-option">
+                                <input type="checkbox" value="${responsible}" ${selectedResponsibles.includes(responsible) ? 'checked' : ''}>
+                                <span>${responsible}</span>
+                            </label>
+                        `)
+                        .join('');
+                }
+            }
+
+            if (filterClasses) {
+                const selectedClasses = getSelectedValues(filterClasses);
+                const eventClasses = events.flatMap(event =>
+                    Array.isArray(event.classes) ? event.classes.map(cls => cls.className) : []
+                );
+                const uniqueClasses = Array.from(new Set([...classes, ...eventClasses]))
+                    .filter(Boolean)
+                    .sort((a, b) => RU_COLLATOR.compare(a, b));
+
+                if (uniqueClasses.length === 0) {
+                    filterClasses.innerHTML = '<div class="checkbox-empty">Нет доступных классов</div>';
+                } else {
+                    filterClasses.innerHTML = uniqueClasses
+                        .map(cls => `
+                            <label class="checkbox-option">
+                                <input type="checkbox" value="${cls}" ${selectedClasses.includes(cls) ? 'checked' : ''}>
+                                <span>${cls}</span>
+                            </label>
+                        `)
+                        .join('');
+                }
+            }
         }
 
         // Add class participant field
@@ -1157,7 +1317,10 @@ tbody tr:hover {
                 events.push(eventData);
                 showToast('Мероприятие добавлено!', 'success');
             }
-            
+
+            saveEvents();
+            updateFilters();
+
             document.getElementById('event-form').reset();
             document.getElementById('class-participants').innerHTML = '';
             classParticipantCounter = 0;
@@ -1234,6 +1397,8 @@ tbody tr:hover {
 
         function confirmDelete() {
             events = events.filter(e => e.id !== deleteEventId);
+            saveEvents();
+            updateFilters();
             showToast('Мероприятие удалено!', 'success');
             closeDeleteModal();
             renderEvents();
@@ -1243,8 +1408,7 @@ tbody tr:hover {
         // Toggle sort
         function toggleSort() {
             sortAsc = !sortAsc;
-            const icon = document.getElementById('sort-icon');
-            icon.className = sortAsc ? 'fas fa-sort-up' : 'fas fa-sort-down';
+            updateSortIcon();
             renderEvents();
         }
 
@@ -1253,22 +1417,52 @@ tbody tr:hover {
             document.getElementById('search-name').value = '';
             document.getElementById('filter-type').value = '';
             document.getElementById('filter-program').value = '';
+            const filterResponsible = document.getElementById('filter-responsible');
+            const filterClasses = document.getElementById('filter-classes');
+            if (filterResponsible) {
+                filterResponsible.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+            }
+            if (filterClasses) {
+                filterClasses.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+            }
             document.getElementById('filter-date-from').value = '';
             document.getElementById('filter-date-to').value = '';
             renderEvents();
         }
 
-        // Render events
-        function renderEvents() {
+        function getSelectedValues(element) {
+            if (!element) return [];
+
+            if (element.tagName === 'SELECT') {
+                return Array.from(element.selectedOptions || [])
+                    .map(option => option.value)
+                    .filter(value => value !== '');
+            }
+
+            return Array.from(element.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(input => input.value)
+                .filter(value => value !== '');
+        }
+
+        function getFilteredEvents() {
             let filtered = [...events];
-            
-            // Apply filters
-            const searchName = document.getElementById('search-name').value.toLowerCase();
-            const filterType = document.getElementById('filter-type').value;
-            const filterProgram = document.getElementById('filter-program').value;
-            const filterDateFrom = document.getElementById('filter-date-from').value;
-            const filterDateTo = document.getElementById('filter-date-to').value;
-            
+
+            const searchInput = document.getElementById('search-name');
+            const typeSelect = document.getElementById('filter-type');
+            const programSelect = document.getElementById('filter-program');
+            const dateFromInput = document.getElementById('filter-date-from');
+            const dateToInput = document.getElementById('filter-date-to');
+            const responsibleSelect = document.getElementById('filter-responsible');
+            const classesSelect = document.getElementById('filter-classes');
+
+            const searchName = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            const filterType = typeSelect ? typeSelect.value : '';
+            const filterProgram = programSelect ? programSelect.value : '';
+            const filterDateFrom = dateFromInput ? dateFromInput.value : '';
+            const filterDateTo = dateToInput ? dateToInput.value : '';
+            const filterResponsibles = getSelectedValues(responsibleSelect);
+            const filterClasses = getSelectedValues(classesSelect);
+
             if (searchName) {
                 filtered = filtered.filter(e => e.name.toLowerCase().includes(searchName));
             }
@@ -1278,37 +1472,60 @@ tbody tr:hover {
             if (filterProgram) {
                 filtered = filtered.filter(e => e.program === filterProgram);
             }
+            if (filterResponsibles.length > 0) {
+                filtered = filtered.filter(e => filterResponsibles.includes(e.responsible));
+            }
+            if (filterClasses.length > 0) {
+                filtered = filtered.filter(event =>
+                    Array.isArray(event.classes) && event.classes.some(cls => filterClasses.includes(cls.className))
+                );
+            }
             if (filterDateFrom) {
                 filtered = filtered.filter(e => e.date >= filterDateFrom);
             }
             if (filterDateTo) {
                 filtered = filtered.filter(e => e.date <= filterDateTo);
             }
-            
-            // Sort
+
             filtered.sort((a, b) => {
-                const dateA = new Date(a.date);
-                const dateB = new Date(b.date);
+                const dateA = a.date ? new Date(a.date) : new Date(0);
+                const dateB = b.date ? new Date(b.date) : new Date(0);
                 return sortAsc ? dateA - dateB : dateB - dateA;
             });
-            
+
+            return filtered;
+        }
+
+        function formatClassesList(event) {
+            if (!event || !Array.isArray(event.classes)) return '';
+            return event.classes.map(c => {
+                const parts = [];
+                if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
+                if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
+                if (parts.length === 0) {
+                    return c.className;
+                }
+                return `${c.className} (${parts.join(', ')})`;
+            }).join(', ');
+        }
+
+        // Render events
+        function renderEvents() {
+            updateSortIcon();
+            const filtered = getFilteredEvents();
+
             const tbody = document.getElementById('events-tbody');
             const emptyState = document.getElementById('empty-state');
-            
+
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
                 emptyState.style.display = 'block';
             } else {
                 emptyState.style.display = 'none';
                 tbody.innerHTML = filtered.map((event, index) => {
-                    const classesStr = event.classes.map(c => {
-                        const parts = [];
-                        if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                        if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                        return `${c.className} (${parts.join(', ')})`;
-                    }).join(', ');
+                    const classesStr = formatClassesList(event);
                     const formattedDate = formatDate(event.date);
-                    
+
                     return `
                         <tr>
                             <td>${index + 1}</td>
@@ -1367,7 +1584,10 @@ tbody tr:hover {
 
         // Format date
         function formatDate(dateStr) {
-            const [year, month, day] = dateStr.split('-');
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const [year, month, day] = parts;
             return `${day}.${month}.${year}`;
         }
 
@@ -1436,6 +1656,7 @@ tbody tr:hover {
                 classes.push(value);
                 input.value = '';
                 renderClassesList();
+                updateFilters();
                 showToast('Класс добавлен!', 'success');
             } else if (classes.includes(value)) {
                 showToast('Этот класс уже существует!', 'error');
@@ -1445,6 +1666,7 @@ tbody tr:hover {
         function removeClass(className) {
             classes = classes.filter(c => c !== className);
             renderClassesList();
+            updateFilters();
             showToast('Класс удален!', 'success');
         }
 
@@ -1496,34 +1718,26 @@ tbody tr:hover {
 
         // Export to Excel
         function exportToExcel() {
-            if (events.length === 0) {
+            const filteredEvents = getFilteredEvents();
+            if (filteredEvents.length === 0) {
                 showToast('Нет данных для экспорта!', 'error');
                 return;
             }
 
-            const data = events.map((event, index) => {
-                const classesStr = event.classes.map(c => {
-                    const parts = [];
-                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                    return `${c.className} (${parts.join(', ')})`;
-                }).join(', ');
-                
-                return {
-                    '№': index + 1,
-                    'Дата': formatDate(event.date),
-                    'Название мероприятия': event.name,
-                    'Классы (детализация)': classesStr,
-                    'Ученики': event.totalStudents || 0,
-                    'Родители': event.totalParents || 0,
-                    'Всего участников': event.totalParticipants || 0,
-                    'Ответственный (ФИО)': event.responsible,
-                    'Программа': event.program,
-                    'Тип': event.type,
-                    'Примечание': event.note || '',
-                    'Ссылки': event.links || ''
-                };
-            });
+            const data = filteredEvents.map((event, index) => ({
+                '№': index + 1,
+                'Дата': formatDate(event.date),
+                'Название мероприятия': event.name,
+                'Классы (детализация)': formatClassesList(event),
+                'Ученики': event.totalStudents || 0,
+                'Родители': event.totalParents || 0,
+                'Всего участников': event.totalParticipants || 0,
+                'Ответственный (ФИО)': event.responsible,
+                'Программа': event.program,
+                'Тип': event.type,
+                'Примечание': event.note || '',
+                'Ссылки': event.links || ''
+            }));
 
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
@@ -1547,7 +1761,8 @@ tbody tr:hover {
 
         // Export to Word
         async function exportToWord() {
-            if (events.length === 0) {
+            const filteredEvents = getFilteredEvents();
+            if (filteredEvents.length === 0) {
                 showToast('Нет данных для экспорта!', 'error');
                 return;
             }
@@ -1573,14 +1788,8 @@ tbody tr:hover {
                 })
             ];
 
-            events.forEach((event, index) => {
-                const classesStr = event.classes.map(c => {
-                    const parts = [];
-                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                    return `${c.className} (${parts.join(', ')})`;
-                }).join(', ');
-                
+            filteredEvents.forEach((event, index) => {
+                const classesStr = formatClassesList(event);
                 tableRows.push(
                     new TableRow({
                         children: [
