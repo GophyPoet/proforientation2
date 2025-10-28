@@ -361,6 +361,13 @@ select.form-control {
   }
 }
 
+select.form-control[multiple] {
+  background-image: none;
+  padding-right: var(--space-12);
+  min-height: 120px;
+  overflow-y: auto;
+}
+
 textarea.form-control {
   resize: vertical;
   min-height: 80px;
@@ -779,6 +786,14 @@ tbody tr:hover {
                             </select>
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Ответственный</label>
+                            <select class="form-control" id="filter-responsible" multiple size="4"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Классы</label>
+                            <select class="form-control" id="filter-classes" multiple size="4"></select>
+                        </div>
+                        <div class="form-group">
                             <label class="form-label">Дата от</label>
                             <input type="date" class="form-control" id="filter-date-from">
                         </div>
@@ -968,6 +983,8 @@ tbody tr:hover {
             }
         ];
 
+        const RU_COLLATOR = new Intl.Collator('ru', { numeric: true, sensitivity: 'base' });
+
         function getDefaultEvents() {
             return DEFAULT_EVENTS.map(event => ({
                 ...event,
@@ -1037,6 +1054,8 @@ tbody tr:hover {
             document.getElementById('search-name').addEventListener('input', renderEvents);
             document.getElementById('filter-type').addEventListener('change', renderEvents);
             document.getElementById('filter-program').addEventListener('change', renderEvents);
+            document.getElementById('filter-responsible').addEventListener('change', renderEvents);
+            document.getElementById('filter-classes').addEventListener('change', renderEvents);
             document.getElementById('filter-date-from').addEventListener('change', renderEvents);
             document.getElementById('filter-date-to').addEventListener('change', renderEvents);
 
@@ -1066,11 +1085,70 @@ tbody tr:hover {
         function updateFilters() {
             const filterType = document.getElementById('filter-type');
             const filterProgram = document.getElementById('filter-program');
-            
-            filterType.innerHTML = '<option value="">Все типы</option>' + 
-                eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
-            filterProgram.innerHTML = '<option value="">Все программы</option>' + 
-                programs.map(p => `<option value="${p}">${p}</option>`).join('');
+            const filterResponsible = document.getElementById('filter-responsible');
+            const filterClasses = document.getElementById('filter-classes');
+
+            if (filterType) {
+                const currentType = filterType.value;
+                filterType.innerHTML = '<option value="">Все типы</option>' +
+                    eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+                if (currentType && eventTypes.includes(currentType)) {
+                    filterType.value = currentType;
+                } else {
+                    filterType.value = '';
+                }
+            }
+
+            if (filterProgram) {
+                const currentProgram = filterProgram.value;
+                filterProgram.innerHTML = '<option value="">Все программы</option>' +
+                    programs.map(p => `<option value="${p}">${p}</option>`).join('');
+                if (currentProgram && programs.includes(currentProgram)) {
+                    filterProgram.value = currentProgram;
+                } else {
+                    filterProgram.value = '';
+                }
+            }
+
+            if (filterResponsible) {
+                const selectedResponsibles = Array.from(filterResponsible.selectedOptions).map(option => option.value);
+                const responsibles = Array.from(new Set(events
+                    .map(event => event.responsible)
+                    .filter(Boolean)))
+                    .sort((a, b) => RU_COLLATOR.compare(a, b));
+
+                filterResponsible.innerHTML = responsibles
+                    .map(responsible => `<option value="${responsible}">${responsible}</option>`)
+                    .join('');
+
+                selectedResponsibles.forEach(value => {
+                    const option = Array.from(filterResponsible.options).find(opt => opt.value === value);
+                    if (option) {
+                        option.selected = true;
+                    }
+                });
+            }
+
+            if (filterClasses) {
+                const selectedClasses = Array.from(filterClasses.selectedOptions).map(option => option.value);
+                const eventClasses = events.flatMap(event =>
+                    Array.isArray(event.classes) ? event.classes.map(cls => cls.className) : []
+                );
+                const uniqueClasses = Array.from(new Set([...classes, ...eventClasses]))
+                    .filter(Boolean)
+                    .sort((a, b) => RU_COLLATOR.compare(a, b));
+
+                filterClasses.innerHTML = uniqueClasses
+                    .map(cls => `<option value="${cls}">${cls}</option>`)
+                    .join('');
+
+                selectedClasses.forEach(value => {
+                    const option = Array.from(filterClasses.options).find(opt => opt.value === value);
+                    if (option) {
+                        option.selected = true;
+                    }
+                });
+            }
         }
 
         // Add class participant field
@@ -1211,7 +1289,8 @@ tbody tr:hover {
             }
 
             saveEvents();
-            
+            updateFilters();
+
             document.getElementById('event-form').reset();
             document.getElementById('class-participants').innerHTML = '';
             classParticipantCounter = 0;
@@ -1289,6 +1368,7 @@ tbody tr:hover {
         function confirmDelete() {
             events = events.filter(e => e.id !== deleteEventId);
             saveEvents();
+            updateFilters();
             showToast('Мероприятие удалено!', 'success');
             closeDeleteModal();
             renderEvents();
@@ -1307,23 +1387,45 @@ tbody tr:hover {
             document.getElementById('search-name').value = '';
             document.getElementById('filter-type').value = '';
             document.getElementById('filter-program').value = '';
+            const filterResponsible = document.getElementById('filter-responsible');
+            const filterClasses = document.getElementById('filter-classes');
+            if (filterResponsible) {
+                Array.from(filterResponsible.options).forEach(option => option.selected = false);
+            }
+            if (filterClasses) {
+                Array.from(filterClasses.options).forEach(option => option.selected = false);
+            }
             document.getElementById('filter-date-from').value = '';
             document.getElementById('filter-date-to').value = '';
             renderEvents();
         }
 
-        // Render events
-        function renderEvents() {
-            updateSortIcon();
+        function getSelectedValues(selectElement) {
+            if (!selectElement) return [];
+            return Array.from(selectElement.selectedOptions || [])
+                .map(option => option.value)
+                .filter(value => value !== '');
+        }
+
+        function getFilteredEvents() {
             let filtered = [...events];
 
-            // Apply filters
-            const searchName = document.getElementById('search-name').value.toLowerCase();
-            const filterType = document.getElementById('filter-type').value;
-            const filterProgram = document.getElementById('filter-program').value;
-            const filterDateFrom = document.getElementById('filter-date-from').value;
-            const filterDateTo = document.getElementById('filter-date-to').value;
-            
+            const searchInput = document.getElementById('search-name');
+            const typeSelect = document.getElementById('filter-type');
+            const programSelect = document.getElementById('filter-program');
+            const dateFromInput = document.getElementById('filter-date-from');
+            const dateToInput = document.getElementById('filter-date-to');
+            const responsibleSelect = document.getElementById('filter-responsible');
+            const classesSelect = document.getElementById('filter-classes');
+
+            const searchName = searchInput ? searchInput.value.trim().toLowerCase() : '';
+            const filterType = typeSelect ? typeSelect.value : '';
+            const filterProgram = programSelect ? programSelect.value : '';
+            const filterDateFrom = dateFromInput ? dateFromInput.value : '';
+            const filterDateTo = dateToInput ? dateToInput.value : '';
+            const filterResponsibles = getSelectedValues(responsibleSelect);
+            const filterClasses = getSelectedValues(classesSelect);
+
             if (searchName) {
                 filtered = filtered.filter(e => e.name.toLowerCase().includes(searchName));
             }
@@ -1333,37 +1435,60 @@ tbody tr:hover {
             if (filterProgram) {
                 filtered = filtered.filter(e => e.program === filterProgram);
             }
+            if (filterResponsibles.length > 0) {
+                filtered = filtered.filter(e => filterResponsibles.includes(e.responsible));
+            }
+            if (filterClasses.length > 0) {
+                filtered = filtered.filter(event =>
+                    Array.isArray(event.classes) && event.classes.some(cls => filterClasses.includes(cls.className))
+                );
+            }
             if (filterDateFrom) {
                 filtered = filtered.filter(e => e.date >= filterDateFrom);
             }
             if (filterDateTo) {
                 filtered = filtered.filter(e => e.date <= filterDateTo);
             }
-            
-            // Sort
+
             filtered.sort((a, b) => {
                 const dateA = a.date ? new Date(a.date) : new Date(0);
                 const dateB = b.date ? new Date(b.date) : new Date(0);
                 return sortAsc ? dateA - dateB : dateB - dateA;
             });
-            
+
+            return filtered;
+        }
+
+        function formatClassesList(event) {
+            if (!event || !Array.isArray(event.classes)) return '';
+            return event.classes.map(c => {
+                const parts = [];
+                if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
+                if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
+                if (parts.length === 0) {
+                    return c.className;
+                }
+                return `${c.className} (${parts.join(', ')})`;
+            }).join(', ');
+        }
+
+        // Render events
+        function renderEvents() {
+            updateSortIcon();
+            const filtered = getFilteredEvents();
+
             const tbody = document.getElementById('events-tbody');
             const emptyState = document.getElementById('empty-state');
-            
+
             if (filtered.length === 0) {
                 tbody.innerHTML = '';
                 emptyState.style.display = 'block';
             } else {
                 emptyState.style.display = 'none';
                 tbody.innerHTML = filtered.map((event, index) => {
-                    const classesStr = event.classes.map(c => {
-                        const parts = [];
-                        if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                        if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                        return `${c.className} (${parts.join(', ')})`;
-                    }).join(', ');
+                    const classesStr = formatClassesList(event);
                     const formattedDate = formatDate(event.date);
-                    
+
                     return `
                         <tr>
                             <td>${index + 1}</td>
@@ -1422,7 +1547,10 @@ tbody tr:hover {
 
         // Format date
         function formatDate(dateStr) {
-            const [year, month, day] = dateStr.split('-');
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            const [year, month, day] = parts;
             return `${day}.${month}.${year}`;
         }
 
@@ -1491,6 +1619,7 @@ tbody tr:hover {
                 classes.push(value);
                 input.value = '';
                 renderClassesList();
+                updateFilters();
                 showToast('Класс добавлен!', 'success');
             } else if (classes.includes(value)) {
                 showToast('Этот класс уже существует!', 'error');
@@ -1500,6 +1629,7 @@ tbody tr:hover {
         function removeClass(className) {
             classes = classes.filter(c => c !== className);
             renderClassesList();
+            updateFilters();
             showToast('Класс удален!', 'success');
         }
 
@@ -1551,34 +1681,26 @@ tbody tr:hover {
 
         // Export to Excel
         function exportToExcel() {
-            if (events.length === 0) {
+            const filteredEvents = getFilteredEvents();
+            if (filteredEvents.length === 0) {
                 showToast('Нет данных для экспорта!', 'error');
                 return;
             }
 
-            const data = events.map((event, index) => {
-                const classesStr = event.classes.map(c => {
-                    const parts = [];
-                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                    return `${c.className} (${parts.join(', ')})`;
-                }).join(', ');
-                
-                return {
-                    '№': index + 1,
-                    'Дата': formatDate(event.date),
-                    'Название мероприятия': event.name,
-                    'Классы (детализация)': classesStr,
-                    'Ученики': event.totalStudents || 0,
-                    'Родители': event.totalParents || 0,
-                    'Всего участников': event.totalParticipants || 0,
-                    'Ответственный (ФИО)': event.responsible,
-                    'Программа': event.program,
-                    'Тип': event.type,
-                    'Примечание': event.note || '',
-                    'Ссылки': event.links || ''
-                };
-            });
+            const data = filteredEvents.map((event, index) => ({
+                '№': index + 1,
+                'Дата': formatDate(event.date),
+                'Название мероприятия': event.name,
+                'Классы (детализация)': formatClassesList(event),
+                'Ученики': event.totalStudents || 0,
+                'Родители': event.totalParents || 0,
+                'Всего участников': event.totalParticipants || 0,
+                'Ответственный (ФИО)': event.responsible,
+                'Программа': event.program,
+                'Тип': event.type,
+                'Примечание': event.note || '',
+                'Ссылки': event.links || ''
+            }));
 
             const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
@@ -1602,7 +1724,8 @@ tbody tr:hover {
 
         // Export to Word
         async function exportToWord() {
-            if (events.length === 0) {
+            const filteredEvents = getFilteredEvents();
+            if (filteredEvents.length === 0) {
                 showToast('Нет данных для экспорта!', 'error');
                 return;
             }
@@ -1628,14 +1751,8 @@ tbody tr:hover {
                 })
             ];
 
-            events.forEach((event, index) => {
-                const classesStr = event.classes.map(c => {
-                    const parts = [];
-                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
-                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
-                    return `${c.className} (${parts.join(', ')})`;
-                }).join(', ');
-                
+            filteredEvents.forEach((event, index) => {
+                const classesStr = formatClassesList(event);
                 tableRows.push(
                     new TableRow({
                         children: [
