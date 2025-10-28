@@ -361,11 +361,37 @@ select.form-control {
   }
 }
 
-select.form-control[multiple] {
-  background-image: none;
-  padding-right: var(--space-12);
-  min-height: 120px;
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: var(--space-10);
+  max-height: 160px;
   overflow-y: auto;
+  background-color: var(--color-background);
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+
+.checkbox-empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 textarea.form-control {
@@ -787,11 +813,11 @@ tbody tr:hover {
                         </div>
                         <div class="form-group">
                             <label class="form-label">Ответственный</label>
-                            <select class="form-control" id="filter-responsible" multiple size="4"></select>
+                            <div class="checkbox-list" id="filter-responsible"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Классы</label>
-                            <select class="form-control" id="filter-classes" multiple size="4"></select>
+                            <div class="checkbox-list" id="filter-classes"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Дата от</label>
@@ -1111,26 +1137,28 @@ tbody tr:hover {
             }
 
             if (filterResponsible) {
-                const selectedResponsibles = Array.from(filterResponsible.selectedOptions).map(option => option.value);
+                const selectedResponsibles = getSelectedValues(filterResponsible);
                 const responsibles = Array.from(new Set(events
                     .map(event => event.responsible)
                     .filter(Boolean)))
                     .sort((a, b) => RU_COLLATOR.compare(a, b));
 
-                filterResponsible.innerHTML = responsibles
-                    .map(responsible => `<option value="${responsible}">${responsible}</option>`)
-                    .join('');
-
-                selectedResponsibles.forEach(value => {
-                    const option = Array.from(filterResponsible.options).find(opt => opt.value === value);
-                    if (option) {
-                        option.selected = true;
-                    }
-                });
+                if (responsibles.length === 0) {
+                    filterResponsible.innerHTML = '<div class="checkbox-empty">Нет доступных ответственных</div>';
+                } else {
+                    filterResponsible.innerHTML = responsibles
+                        .map(responsible => `
+                            <label class="checkbox-option">
+                                <input type="checkbox" value="${responsible}" ${selectedResponsibles.includes(responsible) ? 'checked' : ''}>
+                                <span>${responsible}</span>
+                            </label>
+                        `)
+                        .join('');
+                }
             }
 
             if (filterClasses) {
-                const selectedClasses = Array.from(filterClasses.selectedOptions).map(option => option.value);
+                const selectedClasses = getSelectedValues(filterClasses);
                 const eventClasses = events.flatMap(event =>
                     Array.isArray(event.classes) ? event.classes.map(cls => cls.className) : []
                 );
@@ -1138,16 +1166,18 @@ tbody tr:hover {
                     .filter(Boolean)
                     .sort((a, b) => RU_COLLATOR.compare(a, b));
 
-                filterClasses.innerHTML = uniqueClasses
-                    .map(cls => `<option value="${cls}">${cls}</option>`)
-                    .join('');
-
-                selectedClasses.forEach(value => {
-                    const option = Array.from(filterClasses.options).find(opt => opt.value === value);
-                    if (option) {
-                        option.selected = true;
-                    }
-                });
+                if (uniqueClasses.length === 0) {
+                    filterClasses.innerHTML = '<div class="checkbox-empty">Нет доступных классов</div>';
+                } else {
+                    filterClasses.innerHTML = uniqueClasses
+                        .map(cls => `
+                            <label class="checkbox-option">
+                                <input type="checkbox" value="${cls}" ${selectedClasses.includes(cls) ? 'checked' : ''}>
+                                <span>${cls}</span>
+                            </label>
+                        `)
+                        .join('');
+                }
             }
         }
 
@@ -1390,20 +1420,27 @@ tbody tr:hover {
             const filterResponsible = document.getElementById('filter-responsible');
             const filterClasses = document.getElementById('filter-classes');
             if (filterResponsible) {
-                Array.from(filterResponsible.options).forEach(option => option.selected = false);
+                filterResponsible.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
             }
             if (filterClasses) {
-                Array.from(filterClasses.options).forEach(option => option.selected = false);
+                filterClasses.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
             }
             document.getElementById('filter-date-from').value = '';
             document.getElementById('filter-date-to').value = '';
             renderEvents();
         }
 
-        function getSelectedValues(selectElement) {
-            if (!selectElement) return [];
-            return Array.from(selectElement.selectedOptions || [])
-                .map(option => option.value)
+        function getSelectedValues(element) {
+            if (!element) return [];
+
+            if (element.tagName === 'SELECT') {
+                return Array.from(element.selectedOptions || [])
+                    .map(option => option.value)
+                    .filter(value => value !== '');
+            }
+
+            return Array.from(element.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(input => input.value)
                 .filter(value => value !== '');
         }
 
