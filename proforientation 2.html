@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учет профориентационных мероприятий</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+  --color-bg-1: rgba(59, 130, 246, 0.08);
+  --color-bg-2: rgba(245, 158, 11, 0.08);
+  --color-bg-3: rgba(34, 197, 94, 0.08);
+  --color-bg-4: rgba(239, 68, 68, 0.08);
+  --color-bg-5: rgba(147, 51, 234, 0.08);
+  --color-bg-6: rgba(249, 115, 22, 0.08);
+  --color-bg-7: rgba(236, 72, 153, 0.08);
+  --color-bg-8: rgba(6, 182, 212, 0.08);
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+    --color-bg-1: rgba(29, 78, 216, 0.15);
+    --color-bg-2: rgba(180, 83, 9, 0.15);
+    --color-bg-3: rgba(21, 128, 61, 0.15);
+    --color-bg-4: rgba(185, 28, 28, 0.15);
+    --color-bg-5: rgba(107, 33, 168, 0.15);
+    --color-bg-6: rgba(194, 65, 12, 0.15);
+    --color-bg-7: rgba(190, 24, 93, 0.15);
+    --color-bg-8: rgba(8, 145, 178, 0.15);
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2') format('woff2');
+}
+
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-24);
+}
+
+.header {
+  margin-bottom: var(--space-32);
+}
+
+.header h1 {
+  margin-bottom: var(--space-8);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-4);
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: var(--space-24);
+}
+
+.tab {
+  padding: var(--space-12) var(--space-24);
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all var(--duration-fast) var(--ease-standard);
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-16);
+  margin-bottom: var(--space-32);
+}
+
+.stat-card {
+  background: var(--color-surface);
+  padding: var(--space-20);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card h3 {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card .value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-24);
+}
+
+.card-header {
+  padding: var(--space-20);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+.card-header h3 {
+  font-size: var(--font-size-xl);
+}
+
+.card-body {
+  padding: var(--space-20);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-16);
+}
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-10) var(--space-12);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color var(--duration-fast) var(--ease-standard);
+  font-family: var(--font-family-base);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
+}
+
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+@media (prefers-color-scheme: dark) {
+  select.form-control {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  border: none;
+  text-decoration: none;
+  font-family: var(--font-family-base);
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn-danger {
+  background: var(--color-error);
+  color: var(--color-white);
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+.btn-sm {
+  padding: var(--space-6) var(--space-12);
+  font-size: var(--font-size-sm);
+}
+
+.btn-icon {
+  padding: var(--space-8);
+  width: 32px;
+  height: 32px;
+}
+
+.class-participant {
+  display: flex;
+  gap: var(--space-12);
+  align-items: flex-end;
+  margin-bottom: var(--space-12);
+  padding: var(--space-12);
+  background: var(--color-bg-1);
+  border-radius: var(--radius-base);
+}
+
+.class-participant .form-group {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.total-participants {
+  margin-top: var(--space-16);
+  padding: var(--space-16);
+  background: var(--color-bg-2);
+  border-radius: var(--radius-base);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+thead {
+  background: var(--color-bg-3);
+}
+
+th {
+  padding: var(--space-12);
+  text-align: left;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  border-bottom: 2px solid var(--color-border);
+}
+
+td {
+  padding: var(--space-12);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+tbody tr:hover {
+  background: var(--color-bg-1);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-8);
+}
+
+.filter-row {
+  display: flex;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-20);
+}
+
+.filter-row .form-group {
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 200px;
+}
+
+.export-buttons {
+  display: flex;
+  gap: var(--space-12);
+  margin-top: var(--space-20);
+}
+
+.settings-section {
+  margin-bottom: var(--space-32);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-24);
+}
+
+.settings-item {
+  background: var(--color-bg-1);
+  padding: var(--space-16);
+  border-radius: var(--radius-base);
+}
+
+.settings-item h4 {
+  margin-bottom: var(--space-16);
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-8) var(--space-12);
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-8);
+}
+
+.add-item-form {
+  display: flex;
+  gap: var(--space-8);
+  margin-top: var(--space-12);
+}
+
+.add-item-form input {
+  flex: 1;
+}
+
+.toast {
+  position: fixed;
+  top: var(--space-20);
+  right: var(--space-20);
+  padding: var(--space-16) var(--space-20);
+  background: var(--color-surface);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-width: 300px;
+}
+
+.toast.success {
+  border-left: 4px solid var(--color-success);
+}
+
+.toast.error {
+  border-left: 4px solid var(--color-error);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.active {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--color-surface);
+  padding: var(--space-24);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-20);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: var(--space-12);
+  justify-content: flex-end;
+  margin-top: var(--space-20);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--space-32);
+  color: var(--color-text-secondary);
+}
+
+.empty-state i {
+  font-size: 48px;
+  margin-bottom: var(--space-16);
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--space-16);
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-row {
+    flex-direction: column;
+  }
+  
+  .filter-row .form-group {
+    width: 100%;
+  }
+  
+  table {
+    font-size: var(--font-size-xs);
+  }
+  
+  th, td {
+    padding: var(--space-8);
+  }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Учет профориентационных мероприятий</h1>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('events')">Мероприятия</button>
+            <button class="tab" onclick="switchTab('settings')">Настройки</button>
+        </div>
+
+        <!-- Events Tab -->
+        <div id="events-tab" class="tab-content active">
+            <!-- Statistics -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <h3>Всего мероприятий</h3>
+                    <div class="value" id="total-events">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Всего учеников</h3>
+                    <div class="value" id="total-students">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Всего родителей</h3>
+                    <div class="value" id="total-parents">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Итого участников</h3>
+                    <div class="value" id="total-participants">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>По типам</h3>
+                    <div id="by-types" style="font-size: var(--font-size-sm); margin-top: var(--space-8);"></div>
+                </div>
+            </div>
+
+            <!-- Add Event Form -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 id="form-title">Добавить мероприятие</h3>
+                </div>
+                <div class="card-body">
+                    <form id="event-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Дата проведения *</label>
+                                <input type="date" class="form-control" id="event-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Название мероприятия *</label>
+                                <input type="text" class="form-control" id="event-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Программа *</label>
+                                <select class="form-control" id="event-program" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Тип мероприятия *</label>
+                                <select class="form-control" id="event-type" required></select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Классы-участники *</label>
+                            <div id="class-participants"></div>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addClassParticipant()">
+                                <i class="fas fa-plus"></i> Добавить класс
+                            </button>
+                            <div class="total-participants" id="total-count-display">
+                                Всего учеников: <strong>0</strong> чел.<br>
+                                Всего родителей: <strong>0</strong> чел.<br>
+                                Общее количество участников: <strong>0</strong> чел.
+                            </div>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Ответственный (ФИО) *</label>
+                                <input type="text" class="form-control" id="event-responsible" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Примечание</label>
+                                <textarea class="form-control" id="event-note"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ссылки</label>
+                                <input type="text" class="form-control" id="event-links" placeholder="Несколько ссылок через запятую">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: var(--space-12); margin-top: var(--space-16);">
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <i class="fas fa-plus"></i> Добавить мероприятие
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="cancelEdit()" id="cancel-btn" style="display: none;">
+                                Отмена
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="filter-row">
+                        <div class="form-group">
+                            <label class="form-label">Поиск по названию</label>
+                            <input type="text" class="form-control" id="search-name" placeholder="Введите название...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Фильтр по типу</label>
+                            <select class="form-control" id="filter-type">
+                                <option value="">Все типы</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Фильтр по программе</label>
+                            <select class="form-control" id="filter-program">
+                                <option value="">Все программы</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата от</label>
+                            <input type="date" class="form-control" id="filter-date-from">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Дата до</label>
+                            <input type="date" class="form-control" id="filter-date-to">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="resetFilters()">
+                        <i class="fas fa-redo"></i> Сбросить фильтры
+                    </button>
+                </div>
+            </div>
+
+            <!-- Events Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Список мероприятий</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table id="events-table">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th style="cursor: pointer;" onclick="toggleSort()">Дата <i class="fas fa-sort" id="sort-icon"></i></th>
+                                    <th>Название</th>
+                                    <th>Классы (детализация)</th>
+                                    <th>Ученики</th>
+                                    <th>Родители</th>
+                                    <th>Всего</th>
+                                    <th>Ответственный</th>
+                                    <th>Программа</th>
+                                    <th>Тип</th>
+                                    <th>Примечание</th>
+                                    <th>Ссылки</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="events-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="empty-state" style="display: none;">
+                        <i class="fas fa-calendar-alt"></i>
+                        <p>Нет мероприятий. Добавьте первое мероприятие используя форму выше.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="export-buttons">
+                <button class="btn btn-primary" onclick="exportToExcel()">
+                    <i class="fas fa-file-excel"></i> Экспорт в Excel
+                </button>
+                <button class="btn btn-primary" onclick="exportToWord()">
+                    <i class="fas fa-file-word"></i> Экспорт в Word
+                </button>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-grid">
+                <!-- Classes Management -->
+                <div class="settings-item">
+                    <h4>Управление классами</h4>
+                    <div id="classes-list"></div>
+                    <div class="add-item-form">
+                        <input type="text" class="form-control" id="new-class" placeholder="Например: 12А">
+                        <button class="btn btn-primary btn-sm" onclick="addClass()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Event Types Management -->
+                <div class="settings-item">
+                    <h4>Управление типами мероприятий</h4>
+                    <div id="types-list"></div>
+                    <div class="add-item-form">
+                        <input type="text" class="form-control" id="new-type" placeholder="Новый тип">
+                        <button class="btn btn-primary btn-sm" onclick="addEventType()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Programs Management -->
+                <div class="settings-item">
+                    <h4>Управление программами</h4>
+                    <div id="programs-list"></div>
+                    <div class="add-item-form">
+                        <input type="text" class="form-control" id="new-program" placeholder="Новая программа">
+                        <button class="btn btn-primary btn-sm" onclick="addProgram()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Подтверждение удаления</h3>
+            </div>
+            <p>Вы уверены, что хотите удалить это мероприятие?</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Отмена</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/docx@7.1.0/build/index.js"></script>
+    <script>
+        // Application State
+        let events = [];
+        let classes = ['6А', '6Б', '6В', '6Г', '7А', '7Б', '7В', '7Г', '8А', '8Б', '8В', '8Г', '9А', '9Б', '9В', '9Г', '10А', '11А'];
+        let eventTypes = ['Экскурсия', 'Семинар', 'Мастер класс', 'Конкурс', 'Выставка', 'Лекция', 'Олимпиада', 'Онлайн конференция'];
+        let programs = ['Профминимум', 'Общешкольные мероприятия', 'Билет в будущее', 'Профориентация'];
+        let editingEventId = null;
+        let deleteEventId = null;
+        let sortAsc = false;
+        let classParticipantCounter = 0;
+
+        // Initialize with existing events
+        function initializeExistingEvents() {
+            events = [
+                {
+                    id: 1,
+                    date: '2025-09-09',
+                    name: 'Организационно-презентационная сессия "Единая модель профориентации школьников"',
+                    program: 'Билет в будущее',
+                    type: 'Онлайн конференция',
+                    classes: [
+                        { className: '6В', studentsCount: 0, parentsCount: 1 },
+                        { className: '7А', studentsCount: 0, parentsCount: 1 },
+                        { className: '7Б', studentsCount: 0, parentsCount: 2 },
+                        { className: '9А', studentsCount: 0, parentsCount: 1 }
+                    ],
+                    totalStudents: 0,
+                    totalParents: 5,
+                    totalParticipants: 5,
+                    responsible: 'Подоляко В.В.',
+                    note: 'Проверка активности родителей школы.',
+                    links: 'МО_4107 от 28.08.2025'
+                },
+                {
+                    id: 2,
+                    date: '2025-09-10',
+                    name: 'III Самарская выставка профессий',
+                    program: 'Билет в будущее',
+                    type: 'Выставка',
+                    classes: [
+                        { className: '9Г', studentsCount: 5, parentsCount: 0 }
+                    ],
+                    totalStudents: 5,
+                    totalParents: 0,
+                    totalParticipants: 5,
+                    responsible: 'Груздева О.П.',
+                    note: 'Актуализация профессинальных навыков, ознакомление с профессиями.',
+                    links: '4664 от 03.09.2025: https://vk.com/wall-191404069_5404'
+                },
+                {
+                    id: 3,
+                    date: '2025-09-15',
+                    name: 'Мастер класс от специалиста школы IT "Easy code"',
+                    program: 'Профориентация',
+                    type: 'Мастер класс',
+                    classes: [
+                        { className: '6В', studentsCount: 22, parentsCount: 0 },
+                        { className: '8Б', studentsCount: 17, parentsCount: 0 },
+                        { className: '8Г', studentsCount: 14, parentsCount: 0 },
+                        { className: '9А', studentsCount: 25, parentsCount: 0 },
+                        { className: '9Б', studentsCount: 14, parentsCount: 0 },
+                        { className: '9В', studentsCount: 22, parentsCount: 0 }
+                    ],
+                    totalStudents: 114,
+                    totalParents: 0,
+                    totalParticipants: 114,
+                    responsible: 'Подоляко В.В.',
+                    note: 'Актуализация профессинальных навыков, ознакомление с программированием',
+                    links: 'https://vk.com/wall-191404069_5561'
+                }
+            ];
+        }
+
+        // Initialize app
+        function init() {
+            initializeExistingEvents();
+            renderSettings();
+            updateDropdowns();
+            updateFilters();
+            renderEvents();
+            updateStatistics();
+            addClassParticipant(); // Add first class participant field
+
+            // Add event listeners for filters
+            document.getElementById('search-name').addEventListener('input', renderEvents);
+            document.getElementById('filter-type').addEventListener('change', renderEvents);
+            document.getElementById('filter-program').addEventListener('change', renderEvents);
+            document.getElementById('filter-date-from').addEventListener('change', renderEvents);
+            document.getElementById('filter-date-to').addEventListener('change', renderEvents);
+
+            // Add event listener for form
+            document.getElementById('event-form').addEventListener('submit', handleSubmit);
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Update all dropdowns
+        function updateDropdowns() {
+            const programSelect = document.getElementById('event-program');
+            const typeSelect = document.getElementById('event-type');
+            
+            programSelect.innerHTML = programs.map(p => `<option value="${p}">${p}</option>`).join('');
+            typeSelect.innerHTML = eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+
+        // Update filter dropdowns
+        function updateFilters() {
+            const filterType = document.getElementById('filter-type');
+            const filterProgram = document.getElementById('filter-program');
+            
+            filterType.innerHTML = '<option value="">Все типы</option>' + 
+                eventTypes.map(t => `<option value="${t}">${t}</option>`).join('');
+            filterProgram.innerHTML = '<option value="">Все программы</option>' + 
+                programs.map(p => `<option value="${p}">${p}</option>`).join('');
+        }
+
+        // Add class participant field
+        function addClassParticipant() {
+            const container = document.getElementById('class-participants');
+            const id = classParticipantCounter++;
+            
+            const div = document.createElement('div');
+            div.className = 'class-participant';
+            div.id = `participant-${id}`;
+            
+            div.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Класс</label>
+                    <select class="form-control class-select" data-id="${id}">
+                        <option value="">Выберите класс</option>
+                        ${classes.map(c => `<option value="${c}">${c}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Количество учеников</label>
+                    <input type="number" class="form-control students-count" data-id="${id}" min="0" placeholder="Кол-во учеников">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Количество родителей</label>
+                    <input type="number" class="form-control parents-count" data-id="${id}" min="0" placeholder="Кол-во родителей">
+                </div>
+                <button type="button" class="btn btn-danger btn-icon btn-sm" onclick="removeClassParticipant(${id})" style="margin-top: 24px;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            
+            container.appendChild(div);
+            
+            // Add event listeners
+            div.querySelector('.students-count').addEventListener('input', updateTotalCount);
+            div.querySelector('.parents-count').addEventListener('input', updateTotalCount);
+        }
+
+        // Remove class participant field
+        function removeClassParticipant(id) {
+            const element = document.getElementById(`participant-${id}`);
+            if (element) {
+                element.remove();
+                updateTotalCount();
+            }
+        }
+
+        // Update total count
+        function updateTotalCount() {
+            const studentsInputs = document.querySelectorAll('.students-count');
+            const parentsInputs = document.querySelectorAll('.parents-count');
+            let totalStudents = 0;
+            let totalParents = 0;
+            
+            studentsInputs.forEach(input => {
+                const val = parseInt(input.value) || 0;
+                totalStudents += val;
+            });
+            
+            parentsInputs.forEach(input => {
+                const val = parseInt(input.value) || 0;
+                totalParents += val;
+            });
+            
+            const total = totalStudents + totalParents;
+            document.getElementById('total-count-display').innerHTML = `
+                Всего учеников: <strong>${totalStudents}</strong> чел.<br>
+                Всего родителей: <strong>${totalParents}</strong> чел.<br>
+                Общее количество участников: <strong>${total}</strong> чел.
+            `;
+        }
+
+        // Handle form submit
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            // Get class participants
+            const classSelects = document.querySelectorAll('.class-select');
+            const studentsInputs = document.querySelectorAll('.students-count');
+            const parentsInputs = document.querySelectorAll('.parents-count');
+            const classesData = [];
+            const usedClasses = new Set();
+            
+            for (let i = 0; i < classSelects.length; i++) {
+                const className = classSelects[i].value;
+                const studentsCount = parseInt(studentsInputs[i].value) || 0;
+                const parentsCount = parseInt(parentsInputs[i].value) || 0;
+                
+                if (className && (studentsCount > 0 || parentsCount > 0)) {
+                    if (usedClasses.has(className)) {
+                        showToast('Класс ' + className + ' уже добавлен!', 'error');
+                        return;
+                    }
+                    if (studentsCount === 0 && parentsCount === 0) {
+                        showToast('Для класса ' + className + ' укажите количество учеников или родителей!', 'error');
+                        return;
+                    }
+                    usedClasses.add(className);
+                    classesData.push({ className, studentsCount, parentsCount });
+                }
+            }
+            
+            if (classesData.length === 0) {
+                showToast('Добавьте хотя бы один класс-участник!', 'error');
+                return;
+            }
+            
+            const totalStudents = classesData.reduce((sum, c) => sum + c.studentsCount, 0);
+            const totalParents = classesData.reduce((sum, c) => sum + c.parentsCount, 0);
+            const totalParticipants = totalStudents + totalParents;
+            
+            const eventData = {
+                date: document.getElementById('event-date').value,
+                name: document.getElementById('event-name').value,
+                program: document.getElementById('event-program').value,
+                type: document.getElementById('event-type').value,
+                classes: classesData,
+                totalStudents: totalStudents,
+                totalParents: totalParents,
+                totalParticipants: totalParticipants,
+                responsible: document.getElementById('event-responsible').value,
+                note: document.getElementById('event-note').value,
+                links: document.getElementById('event-links').value
+            };
+            
+            if (editingEventId) {
+                // Update existing event
+                const index = events.findIndex(e => e.id === editingEventId);
+                events[index] = { ...events[index], ...eventData };
+                showToast('Мероприятие обновлено!', 'success');
+                cancelEdit();
+            } else {
+                // Add new event
+                eventData.id = Date.now();
+                events.push(eventData);
+                showToast('Мероприятие добавлено!', 'success');
+            }
+            
+            document.getElementById('event-form').reset();
+            document.getElementById('class-participants').innerHTML = '';
+            classParticipantCounter = 0;
+            addClassParticipant();
+            updateTotalCount();
+            renderEvents();
+            updateStatistics();
+        }
+
+        // Edit event
+        function editEvent(id) {
+            const event = events.find(e => e.id === id);
+            if (!event) return;
+            
+            editingEventId = id;
+            
+            document.getElementById('event-date').value = event.date;
+            document.getElementById('event-name').value = event.name;
+            document.getElementById('event-program').value = event.program;
+            document.getElementById('event-type').value = event.type;
+            document.getElementById('event-responsible').value = event.responsible;
+            document.getElementById('event-note').value = event.note || '';
+            document.getElementById('event-links').value = event.links || '';
+            
+            // Clear and recreate class participants
+            document.getElementById('class-participants').innerHTML = '';
+            classParticipantCounter = 0;
+            
+            event.classes.forEach(cls => {
+                addClassParticipant();
+                const lastId = classParticipantCounter - 1;
+                document.querySelector(`.class-select[data-id="${lastId}"]`).value = cls.className;
+                document.querySelector(`.students-count[data-id="${lastId}"]`).value = cls.studentsCount || 0;
+                document.querySelector(`.parents-count[data-id="${lastId}"]`).value = cls.parentsCount || 0;
+            });
+            
+            if (event.classes.length === 0) {
+                addClassParticipant();
+            }
+            
+            updateTotalCount();
+            
+            document.getElementById('form-title').textContent = 'Редактировать мероприятие';
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+            document.getElementById('cancel-btn').style.display = 'inline-flex';
+            
+            // Scroll to form
+            document.getElementById('event-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Cancel edit
+        function cancelEdit() {
+            editingEventId = null;
+            document.getElementById('event-form').reset();
+            document.getElementById('class-participants').innerHTML = '';
+            classParticipantCounter = 0;
+            addClassParticipant();
+            updateTotalCount();
+            document.getElementById('form-title').textContent = 'Добавить мероприятие';
+            document.getElementById('submit-btn').innerHTML = '<i class="fas fa-plus"></i> Добавить мероприятие';
+            document.getElementById('cancel-btn').style.display = 'none';
+        }
+
+        // Delete event
+        function deleteEvent(id) {
+            deleteEventId = id;
+            document.getElementById('delete-modal').classList.add('active');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('delete-modal').classList.remove('active');
+            deleteEventId = null;
+        }
+
+        function confirmDelete() {
+            events = events.filter(e => e.id !== deleteEventId);
+            showToast('Мероприятие удалено!', 'success');
+            closeDeleteModal();
+            renderEvents();
+            updateStatistics();
+        }
+
+        // Toggle sort
+        function toggleSort() {
+            sortAsc = !sortAsc;
+            const icon = document.getElementById('sort-icon');
+            icon.className = sortAsc ? 'fas fa-sort-up' : 'fas fa-sort-down';
+            renderEvents();
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('search-name').value = '';
+            document.getElementById('filter-type').value = '';
+            document.getElementById('filter-program').value = '';
+            document.getElementById('filter-date-from').value = '';
+            document.getElementById('filter-date-to').value = '';
+            renderEvents();
+        }
+
+        // Render events
+        function renderEvents() {
+            let filtered = [...events];
+            
+            // Apply filters
+            const searchName = document.getElementById('search-name').value.toLowerCase();
+            const filterType = document.getElementById('filter-type').value;
+            const filterProgram = document.getElementById('filter-program').value;
+            const filterDateFrom = document.getElementById('filter-date-from').value;
+            const filterDateTo = document.getElementById('filter-date-to').value;
+            
+            if (searchName) {
+                filtered = filtered.filter(e => e.name.toLowerCase().includes(searchName));
+            }
+            if (filterType) {
+                filtered = filtered.filter(e => e.type === filterType);
+            }
+            if (filterProgram) {
+                filtered = filtered.filter(e => e.program === filterProgram);
+            }
+            if (filterDateFrom) {
+                filtered = filtered.filter(e => e.date >= filterDateFrom);
+            }
+            if (filterDateTo) {
+                filtered = filtered.filter(e => e.date <= filterDateTo);
+            }
+            
+            // Sort
+            filtered.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return sortAsc ? dateA - dateB : dateB - dateA;
+            });
+            
+            const tbody = document.getElementById('events-tbody');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+                tbody.innerHTML = filtered.map((event, index) => {
+                    const classesStr = event.classes.map(c => {
+                        const parts = [];
+                        if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
+                        if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
+                        return `${c.className} (${parts.join(', ')})`;
+                    }).join(', ');
+                    const formattedDate = formatDate(event.date);
+                    
+                    return `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${formattedDate}</td>
+                            <td>${event.name}</td>
+                            <td>${classesStr || '-'}</td>
+                            <td>${event.totalStudents || 0}</td>
+                            <td>${event.totalParents || 0}</td>
+                            <td>${event.totalParticipants || 0}</td>
+                            <td>${event.responsible}</td>
+                            <td>${event.program}</td>
+                            <td>${event.type}</td>
+                            <td>${event.note || '-'}</td>
+                            <td>${event.links ? `<a href="${event.links.split(',')[0].trim()}" target="_blank" style="color: var(--color-primary);">Ссылка</a>` : '-'}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="btn btn-secondary btn-icon btn-sm" onclick="editEvent(${event.id})" title="Редактировать">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-icon btn-sm" onclick="deleteEvent(${event.id})" title="Удалить">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalEvents = events.length;
+            const totalStudents = events.reduce((sum, e) => sum + (e.totalStudents || 0), 0);
+            const totalParents = events.reduce((sum, e) => sum + (e.totalParents || 0), 0);
+            const totalParticipants = totalStudents + totalParents;
+            
+            document.getElementById('total-events').textContent = totalEvents;
+            document.getElementById('total-students').textContent = totalStudents;
+            document.getElementById('total-parents').textContent = totalParents;
+            document.getElementById('total-participants').textContent = totalParticipants;
+            
+            // Count by types
+            const byTypes = {};
+            events.forEach(e => {
+                byTypes[e.type] = (byTypes[e.type] || 0) + 1;
+            });
+            
+            const byTypesHtml = Object.entries(byTypes)
+                .sort((a, b) => b[1] - a[1])
+                .map(([type, count]) => `<div>${type}: ${count}</div>`)
+                .join('');
+            
+            document.getElementById('by-types').innerHTML = byTypesHtml || '<div style="color: var(--color-text-secondary);">Нет данных</div>';
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            return `${day}.${month}.${year}`;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Settings Management
+        function renderSettings() {
+            renderClassesList();
+            renderTypesList();
+            renderProgramsList();
+        }
+
+        function renderClassesList() {
+            const list = document.getElementById('classes-list');
+            list.innerHTML = classes.map(c => `
+                <div class="list-item">
+                    <span>${c}</span>
+                    <button class="btn btn-danger btn-icon btn-sm" onclick="removeClass('${c}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderTypesList() {
+            const list = document.getElementById('types-list');
+            list.innerHTML = eventTypes.map(t => `
+                <div class="list-item">
+                    <span>${t}</span>
+                    <button class="btn btn-danger btn-icon btn-sm" onclick="removeEventType('${t}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderProgramsList() {
+            const list = document.getElementById('programs-list');
+            list.innerHTML = programs.map(p => `
+                <div class="list-item">
+                    <span>${p}</span>
+                    <button class="btn btn-danger btn-icon btn-sm" onclick="removeProgram('${p}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function addClass() {
+            const input = document.getElementById('new-class');
+            const value = input.value.trim();
+            if (value && !classes.includes(value)) {
+                classes.push(value);
+                input.value = '';
+                renderClassesList();
+                showToast('Класс добавлен!', 'success');
+            } else if (classes.includes(value)) {
+                showToast('Этот класс уже существует!', 'error');
+            }
+        }
+
+        function removeClass(className) {
+            classes = classes.filter(c => c !== className);
+            renderClassesList();
+            showToast('Класс удален!', 'success');
+        }
+
+        function addEventType() {
+            const input = document.getElementById('new-type');
+            const value = input.value.trim();
+            if (value && !eventTypes.includes(value)) {
+                eventTypes.push(value);
+                input.value = '';
+                renderTypesList();
+                updateDropdowns();
+                updateFilters();
+                showToast('Тип мероприятия добавлен!', 'success');
+            } else if (eventTypes.includes(value)) {
+                showToast('Этот тип уже существует!', 'error');
+            }
+        }
+
+        function removeEventType(type) {
+            eventTypes = eventTypes.filter(t => t !== type);
+            renderTypesList();
+            updateDropdowns();
+            updateFilters();
+            showToast('Тип мероприятия удален!', 'success');
+        }
+
+        function addProgram() {
+            const input = document.getElementById('new-program');
+            const value = input.value.trim();
+            if (value && !programs.includes(value)) {
+                programs.push(value);
+                input.value = '';
+                renderProgramsList();
+                updateDropdowns();
+                updateFilters();
+                showToast('Программа добавлена!', 'success');
+            } else if (programs.includes(value)) {
+                showToast('Эта программа уже существует!', 'error');
+            }
+        }
+
+        function removeProgram(program) {
+            programs = programs.filter(p => p !== program);
+            renderProgramsList();
+            updateDropdowns();
+            updateFilters();
+            showToast('Программа удалена!', 'success');
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            if (events.length === 0) {
+                showToast('Нет данных для экспорта!', 'error');
+                return;
+            }
+
+            const data = events.map((event, index) => {
+                const classesStr = event.classes.map(c => {
+                    const parts = [];
+                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
+                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
+                    return `${c.className} (${parts.join(', ')})`;
+                }).join(', ');
+                
+                return {
+                    '№': index + 1,
+                    'Дата': formatDate(event.date),
+                    'Название мероприятия': event.name,
+                    'Классы (детализация)': classesStr,
+                    'Ученики': event.totalStudents || 0,
+                    'Родители': event.totalParents || 0,
+                    'Всего участников': event.totalParticipants || 0,
+                    'Ответственный (ФИО)': event.responsible,
+                    'Программа': event.program,
+                    'Тип': event.type,
+                    'Примечание': event.note || '',
+                    'Ссылки': event.links || ''
+                };
+            });
+
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Мероприятия');
+
+            // Style the header
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            for (let C = range.s.c; C <= range.e.c; ++C) {
+                const address = XLSX.utils.encode_col(C) + "1";
+                if (!ws[address]) continue;
+                ws[address].s = {
+                    fill: { fgColor: { rgb: "4472C4" } },
+                    font: { bold: true, color: { rgb: "FFFFFF" } }
+                };
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `Профминимум_отчет_${today}.xlsx`);
+            showToast('Excel файл успешно экспортирован!', 'success');
+        }
+
+        // Export to Word
+        async function exportToWord() {
+            if (events.length === 0) {
+                showToast('Нет данных для экспорта!', 'error');
+                return;
+            }
+
+            const { Document, Packer, Paragraph, Table, TableCell, TableRow, WidthType, BorderStyle, AlignmentType } = docx;
+
+            const tableRows = [
+                new TableRow({
+                    children: [
+                        new TableCell({ children: [new Paragraph({ text: '№', bold: true })], width: { size: 4, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Дата', bold: true })], width: { size: 7, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Название мероприятия', bold: true })], width: { size: 18, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Классы (детализация)', bold: true })], width: { size: 15, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Ученики', bold: true })], width: { size: 5, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Родители', bold: true })], width: { size: 5, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Всего', bold: true })], width: { size: 5, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Ответственный', bold: true })], width: { size: 10, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Программа', bold: true })], width: { size: 9, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Тип', bold: true })], width: { size: 9, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Примечание', bold: true })], width: { size: 8, type: WidthType.PERCENTAGE } }),
+                        new TableCell({ children: [new Paragraph({ text: 'Ссылки', bold: true })], width: { size: 10, type: WidthType.PERCENTAGE } })
+                    ]
+                })
+            ];
+
+            events.forEach((event, index) => {
+                const classesStr = event.classes.map(c => {
+                    const parts = [];
+                    if (c.studentsCount > 0) parts.push(`${c.studentsCount} уч.`);
+                    if (c.parentsCount > 0) parts.push(`${c.parentsCount} род.`);
+                    return `${c.className} (${parts.join(', ')})`;
+                }).join(', ');
+                
+                tableRows.push(
+                    new TableRow({
+                        children: [
+                            new TableCell({ children: [new Paragraph((index + 1).toString())] }),
+                            new TableCell({ children: [new Paragraph(formatDate(event.date))] }),
+                            new TableCell({ children: [new Paragraph(event.name)] }),
+                            new TableCell({ children: [new Paragraph(classesStr)] }),
+                            new TableCell({ children: [new Paragraph((event.totalStudents || 0).toString())] }),
+                            new TableCell({ children: [new Paragraph((event.totalParents || 0).toString())] }),
+                            new TableCell({ children: [new Paragraph((event.totalParticipants || 0).toString())] }),
+                            new TableCell({ children: [new Paragraph(event.responsible)] }),
+                            new TableCell({ children: [new Paragraph(event.program)] }),
+                            new TableCell({ children: [new Paragraph(event.type)] }),
+                            new TableCell({ children: [new Paragraph(event.note || '')] }),
+                            new TableCell({ children: [new Paragraph(event.links || '')] })
+                        ]
+                    })
+                );
+            });
+
+            const table = new Table({
+                rows: tableRows,
+                width: { size: 100, type: WidthType.PERCENTAGE }
+            });
+
+            const doc = new Document({
+                sections: [{
+                    children: [
+                        new Paragraph({
+                            text: 'Отчет по профориентационным мероприятиям',
+                            heading: 'Heading1',
+                            alignment: AlignmentType.CENTER
+                        }),
+                        new Paragraph({ text: '' }),
+                        table
+                    ]
+                }]
+            });
+
+            const blob = await Packer.toBlob(doc);
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            const today = new Date().toISOString().split('T')[0];
+            link.download = `Профминимум_отчет_${today}.docx`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('Word файл успешно экспортирован!', 'success');
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
